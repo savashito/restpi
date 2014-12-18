@@ -1,0 +1,22 @@
+{
+  "name": "hurbPi",
+  "version": "0.0.0",
+  "description": "This is a restful API that controls and tells Hurb what to do",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hurb"
+  ],
+  "author": "Rodrigo Savage",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.10.0",
+    "express": "^4.10.6",
+    "morgan": "^1.5.0",
+    "request": "^2.51.0",
+    "speaker": "^0.2.1",
+    "lame": "^1.1.1"
+  }
+}
