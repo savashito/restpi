@@ -3,10 +3,10 @@
 #http://RasPi.tv/2013/how-to-use-soft-pwm-in-rpi-gpio-pt-2-led-dimming-and-motor-speed-control
 # Using PWM with RPi.GPIO pt 2 - requires RPi.GPIO 0.5.2a or higher
 
-# import RPi.GPIO as GPIO # always needed with RPi.GPIO
-# from time import sleep  # pull in the sleep function from time module
+import RPi.GPIO as GPIO # always needed with RPi.GPIO
+from time import sleep  # pull in the sleep function from time module
 
-# GPIO.setmode(GPIO.BCM)  # choose BCM or BOARD numbering schemes. I use BCM
+GPIO.setmode(GPIO.BCM)  # choose BCM or BOARD numbering schemes. I use BCM
 
 # GPIO.setup(25, GPIO.OUT)# set GPIO 25 as output for white led
 # GPIO.setup(24, GPIO.OUT)# set GPIO 24 as output for red led
@@ -39,9 +39,9 @@ try:
 			if(arr[0]=='led'):
 				animationSpeed = int(arr[1])
 				n = (len(arr)-2)/3 # number of commands in the queue
-				totalSteps = 100.0 # this is the resolution :)
+				totalSteps = 50.0 # this is the resolution :)
 				stepSize={}
-				ledGPIO = {}
+				ledGPIOArr = {}
 				leds = []
 				pause_time = animationSpeed/totalSteps
 				currentVal = {}
@@ -51,11 +51,13 @@ try:
 					startValue 	= int(arr[i*3+3])
 					ledFinalVal = int(arr[i*3+4])
 					leds.append(ledPin)
+					ledGPIO= None # ledGPIOArr[ledPin]
 					stepSize[ledPin] = (ledFinalVal-startValue)/totalSteps
-					# if(ledGPIO==null)
-					# ledGPIO = GPIO.PWM(ledPin, 100) 
-					# ledGPIO.start(startValue)
-					# ledGPIO[ledPin] = ledGPIO
+					if(ledGPIO==None):
+						GPIO.setup(ledPin, GPIO.OUT)
+				 		ledGPIO = GPIO.PWM(ledPin, 120) # set to 100 hz
+						ledGPIO.start(startValue)
+						ledGPIOArr[ledPin] = ledGPIO
 					currentVal[ledPin] = startValue
 				# move the led to final value
 				# startValue = prevValues[ledPin]
@@ -74,8 +76,8 @@ try:
 						# Animate each led 
 						# ledGPIO[led].ChangeDutyCycle(current + step)
 						print str(led) +' '+str(step)+' val: '+str(currentVal[led])
-
-						# sleep(pause_time)
+						ledGPIOArr[ledPin].ChangeDutyCycle(int(currentVal[led]))
+					sleep(pause_time)
 				# update previous value
 				# prevValues[ledPin] = ledFinalVal
 			elif(arr[0]=='temp'):
