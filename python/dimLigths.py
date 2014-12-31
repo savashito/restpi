@@ -44,6 +44,7 @@ try:
 				ledGPIO = {}
 				leds = []
 				pause_time = animationSpeed/totalSteps
+				currentVal = {}
 				# FIll the array with the correct data to animate
 				for i in range(0,n):
 					ledPin 		= int(arr[i*3+2])
@@ -63,15 +64,17 @@ try:
 				# 	print i
 				# ignore everything, here is your scrap!
 				# we need an array with the step size for each led
-				for i in range(0,totalSteps):
+				for i in range(0,int(totalSteps)):
 					# update each led
 					for led in leds:
 						step = stepSize[led]
-						current = currentVal[led]
-						currentVal[led] += current
+
+						# current = currentVal[led]
+						currentVal[led] += step
 						# Animate each led 
 						# ledGPIO[led].ChangeDutyCycle(current + step)
-						print led +' '+step
+						print str(led) +' '+str(step)+' val: '+str(currentVal[led])
+
 						# sleep(pause_time)
 				# update previous value
 				# prevValues[ledPin] = ledFinalVal
