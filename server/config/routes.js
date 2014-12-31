@@ -15,26 +15,35 @@ module.exports = function(router)
 		res.json({ message: 'hooray! Muahha Te quiero!' });	
 	});
 	
-	router.post('/api/soul/:emotion', function(req, res) {
+	router.post('/soul/:emotion', function(req, res) {
 		var emotion = req.params.emotion;
+		console.log( req.params)
 		switch(emotion){
 			case 'sad':
 				hurb.makeSad();
+				res.json({ message: 'Hurb is sad now :('});	
 			break;
 			case 'happy':
 				hurb.makeHappy();
+				res.json({ message: 'Hurb is Happy'});	
 			break;
+			default:
+				res.json({ message: 'Error, undefined emotion "'+emotion+'"'});	
+				break;
 		}
-	}
+	});
 	
-	router.post('/api/volume', function(req, res) {
+	router.post('/volume', function(req, res) {
 		var amount = req.body.amount;
-		audio.incVolume(amount);
-	}
+		val = audio.incVolume(amount);
+		res.json({ message: 'Current volum is '+val });	
+	});
 
-	router.post('/api/music', function(req, res) {
+	router.post('/music', function(req, res) {
 		var song = req.body.url;
+		console.log('Song '+song)
 		audio.playSong(song);
+		res.json({ message: 'Playing song '+song });	
 		// var music = new Mpg();
 		// stream = request(song);
 		// stream.pipe(new lame.Decoder).pipe(music)

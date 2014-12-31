@@ -1,7 +1,4 @@
 Traceback (most recent call last):
-  File "/Users/rodrigosavage/Documents/phd/hydroponic/restPi/python/dimLigths.py", line 33, in <module>
-    x = raw_input('Type a commang ->')
-EOFError: EOF when reading a line
-close failed in file object destructor:
-sys.excepthook is missing
-lost sys.stderr
+  File "./python/dimLigths.py", line 6, in <module>
+    import RPi.GPIO as GPIO # always needed with RPi.GPIO
+ImportError: No module named RPi.GPIO

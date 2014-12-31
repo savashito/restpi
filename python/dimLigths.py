@@ -26,7 +26,15 @@ GPIO.setmode(GPIO.BCM)  # choose BCM or BOARD numbering schemes. I use BCM
 # command = {exit:}
 import math
 print "running dimLigths.py"
-
+# init gpio to output
+GPIO.setup(24, GPIO.OUT) 
+GPIO.setup(25, GPIO.OUT) 
+ledGPIOArr = {
+	24:GPIO.PWM(24, 100),
+	25:GPIO.PWM(25, 100) 
+}
+stepSize={}
+currentVal = {}
 try:
 	c = 'f'
 	while c!='o':
@@ -40,24 +48,22 @@ try:
 				animationSpeed = int(arr[1])
 				n = (len(arr)-2)/3 # number of commands in the queue
 				totalSteps = 50.0 # this is the resolution :)
-				stepSize={}
-				ledGPIOArr = {}
 				leds = []
 				pause_time = animationSpeed/totalSteps
-				currentVal = {}
+				
 				# FIll the array with the correct data to animate
 				for i in range(0,n):
 					ledPin 		= int(arr[i*3+2])
 					startValue 	= int(arr[i*3+3])
 					ledFinalVal = int(arr[i*3+4])
 					leds.append(ledPin)
-					ledGPIO= None # ledGPIOArr[ledPin]
+					# ledGPIO = ledGPIOArr[ledPin] # ledGPIOArr[ledPin]
 					stepSize[ledPin] = (ledFinalVal-startValue)/totalSteps
-					if(ledGPIO==None):
-						GPIO.setup(ledPin, GPIO.OUT)
-				 		ledGPIO = GPIO.PWM(ledPin, 100) # set to 100 hz
-						ledGPIO.start(startValue)
-						ledGPIOArr[ledPin] = ledGPIO
+					# if(ledGPIO==None):
+					# 	GPIO.setup(ledPin, GPIO.OUT)
+				 	#	ledGPIO = GPIO.PWM(ledPin, 100) # set to 100 hz
+					# 	ledGPIO.start(startValue)
+					# 	ledGPIOArr[ledPin] = ledGPIO
 					currentVal[ledPin] = startValue
 				# move the led to final value
 				# startValue = prevValues[ledPin]
@@ -73,11 +79,12 @@ try:
 						step = stepSize[led]
 
 						# current = currentVal[led]
-						currentVal[led] += step
+						val = currentVal[led] + step
+						currentVal[led] = val
 						# Animate each led 
 						# ledGPIO[led].ChangeDutyCycle(current + step)
 						# print str(led) +' '+str(step)+' val: '+str(currentVal[led])
-						ledGPIOArr[ledPin].ChangeDutyCycle(int(currentVal[led]))
+						ledGPIOArr[ledPin].ChangeDutyCycle(int(val))
 					sleep(pause_time)
 				# update previous value
 				# prevValues[ledPin] = ledFinalVal

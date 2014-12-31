@@ -2,8 +2,9 @@ var child_process = require('child_process');
 var fs = require('fs');
 
 
-var currentSong,inputStream;
-
+var currentSong,inputStream = undefined;
+var volume = 0;
+// var songIsPlaying = false;
 var playSong = function(song){
 	currentSong = song;
 	child = child_process.spawn(
@@ -23,9 +24,11 @@ var playSong = function(song){
 	child.stdout.on('data', function(data) { console.log(data.toString('ascii')); });
 
 	child.on('error',function(err){
+		inputStream = undefined;
 		console.log(err);
 	})
 	child.on('exit',function(){
+		inputStream = undefined;
 		console.log('Termino el proceso');
 	})
 	return {song:song,volume:0};
@@ -33,6 +36,7 @@ var playSong = function(song){
 exports.playSong = playSong;
 
 var incVolume = function(amount){
+	volume += parseFloat(amount);
 	count = Math.abs(amount)+1;
 	var s;
 	if(amount>0){
@@ -41,11 +45,18 @@ var incVolume = function(amount){
 	else{
 		s = Array(count).join("-")
 	}
-	inputStream.write(s);
+	if(inputStream!==undefined){
+		inputStream.write("o");
+	}
+	return volume;
 }
+exports.incVolume = incVolume;
 
 var killSong = function(){
-	inputStream.write("o");
+	if(inputStream!==undefined){
+		inputStream.write("o");
+		inputStream = undefined;
+	}
 }
 
 playSong("te quiero matar!!.mp3");

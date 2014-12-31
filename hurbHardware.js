@@ -5,13 +5,13 @@ var fs = require('fs');
 var pythonController = undefined;
 
 var isHurbPythonRunning = false;
-var inputStream;
+var inputStream = undefined;
 var initHubHadware = function(){
-	if(isHurbPythonRunning==false){
+	if(inputStream===undefined){
 		isHurbPythonRunning = true;
 		child = child_process.spawn(
 			// 'pwd',
-			'python', ['/Users/rodrigosavage/Documents/phd/hydroponic/restPi/python/dimLigths.py'],
+			'python', ['./python/dimLigths.py'],
 		 	// 'omxplayer',[song],
 		 	{
 			 	detached:true,
@@ -24,13 +24,17 @@ var initHubHadware = function(){
 		);
 		// console.log('cmd Excuted!');
 		inputStream = child.stdin;
-		child.stdout.on('data', function(data) { console.log(data.toString('ascii')); });
+		child.stdout.on('data', function(data) { 
+			console.log(data.toString('ascii')); 
+		});
 
 		child.on('error',function(err){
 			console.log(err);
+			inputStream = undefined;
 		})
 		child.on('exit',function(){
-			console.log('Termino el proceso');
+			inputStream = undefined;
+			console.log('Hurb emotions excecuted :)');
 		})
 	}
 };
@@ -46,8 +50,17 @@ var prev = {
 	26:0
 };
 exports.dumpEmotions = function(){
-
+	// terminate the python script and excecute the thing
+	killEmorions();
 };
+var killEmorions = function(){
+	if(inputStream!==undefined){
+		inputStream.write("exit");
+		console.log('exit emorions')
+		// inputStream = undefined;
+	}
+}
+
 exports.animateLED = function(led,intensity,speed){
 	// console.log('animateLED');
 	initHubHadware();
@@ -56,6 +69,7 @@ exports.animateLED = function(led,intensity,speed){
 	// update previus value with new value!
 	prev[led] = intensity;
 	console.log(cmd);
+
 	inputStream.write(cmd);
 	// inputStream.write('exit');
 	// isHurbPythonRunning = false;
