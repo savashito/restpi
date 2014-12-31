@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/Users/rodrigosavage/Documents/phd/hydroponic/restPi/python/dimLigths.py", line 33, in <module>
+    x = raw_input('Type a commang ->')
+EOFError: EOF when reading a line
+close failed in file object destructor:
+sys.excepthook is missing
+lost sys.stderr
