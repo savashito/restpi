@@ -55,7 +55,7 @@ try:
 					stepSize[ledPin] = (ledFinalVal-startValue)/totalSteps
 					if(ledGPIO==None):
 						GPIO.setup(ledPin, GPIO.OUT)
-				 		ledGPIO = GPIO.PWM(ledPin, 120) # set to 100 hz
+				 		ledGPIO = GPIO.PWM(ledPin, 100) # set to 100 hz
 						ledGPIO.start(startValue)
 						ledGPIOArr[ledPin] = ledGPIO
 					currentVal[ledPin] = startValue
@@ -69,13 +69,14 @@ try:
 				for i in range(0,int(totalSteps)):
 					# update each led
 					for led in leds:
+						# Extract the current step size for LED
 						step = stepSize[led]
 
 						# current = currentVal[led]
 						currentVal[led] += step
 						# Animate each led 
 						# ledGPIO[led].ChangeDutyCycle(current + step)
-						print str(led) +' '+str(step)+' val: '+str(currentVal[led])
+						# print str(led) +' '+str(step)+' val: '+str(currentVal[led])
 						ledGPIOArr[ledPin].ChangeDutyCycle(int(currentVal[led]))
 					sleep(pause_time)
 				# update previous value
