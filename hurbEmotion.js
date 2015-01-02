@@ -3,10 +3,11 @@ var color = ledHurb.color;
 var currentState = undefined;
 
 var makeSad = function(){
+	ledHurb.setAnimationTime(3); 	// animation last 3 seconds
 	ledHurb.animateLED(color.red, 100); // animate with default speed
 	ledHurb.animateLED(color.blue, 30); // animate with default speed
 	ledHurb.animateLED(color.green, 3); // animate with default speed
-	ledHurb.animateLED(color.green, 40); // animate with default speed
+	// ledHurb.animateLED(color.green, 40); // animate with default speed
 	ledHurb.dumpEmotions(); // dumps the queue of emotions :)
 };
 
