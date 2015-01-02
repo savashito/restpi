@@ -8,6 +8,9 @@ var volume = 0;
 var playSong = function(song){
 	currentSong = song;
 	try{
+		if(inputStream!==undefined){
+			killSong();
+		}
 		child = child_process.spawn(
 			// 'pwd',
 			//'python', ['/Users/rodrigosavage/Documents/phd/hydroponic/restPi/python/audio.py',song],
@@ -62,7 +65,7 @@ var playSong = function(song){
 exports.playSong = playSong;
 
 var incVolume = function(amount){
-	console.log('incVol');
+	console.log('incVol',inputStream);
 	volume += parseFloat(amount);
 	count = Math.abs(amount)+1;
 	var s;
@@ -73,7 +76,7 @@ var incVolume = function(amount){
 		s = Array(count).join("-")
 	}
 	if(inputStream!==undefined){
-			console.log('Mando volumen');
+			console.log('Mando volumen',s);
 			inputStream.write(s);
 	}
 	return volume;
@@ -81,11 +84,13 @@ var incVolume = function(amount){
 exports.incVolume = incVolume;
 
 var killSong = function(){
+	console.log('killSong ',inputStream);
 	if(inputStream!==undefined){
-		inputStream.write("o");
+		inputStream.write("q");
 		inputStream = undefined;
 	}
 }
+exports.killSong = killSong;
 
 playSong("te quiero matar!!.mp3");
 incVolume(4);

@@ -29,6 +29,10 @@ var initHubHadware = function(){
 		);
 		// console.log('cmd Excuted!');
 		inputStream = child.stdin;
+		inputStream.on('error',function(err){
+			console.log('error',err);
+			inputStream = undefined;
+		});
 		child.stdout.on('data', function(data) { 
 			console.log(data.toString('ascii')); 
 		});

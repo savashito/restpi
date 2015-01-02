@@ -33,13 +33,18 @@ module.exports = function(router)
 		}
 	});
 	
-	router.post('/volume', function(req, res) {
+	router.post('/music/volume', function(req, res) {
 		var amount = req.body.amount;
 		val = audio.incVolume(amount);
 		res.json({ message: 'Current volum is '+val });	
 	});
+	router.post('/music/stop', function(req, res) {
+		// var amount = req.body.amount;
+		audio.killSong(amount);
+		res.json({ message: 'Current volum is '});	
+	});
 
-	router.post('/music', function(req, res) {
+	router.post('/music/play', function(req, res) {
 		var song = req.body.url;
 		console.log('Song '+song)
 		audio.playSong(song);
